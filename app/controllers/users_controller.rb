@@ -28,6 +28,11 @@ class UsersController < ApplicationController
   end
 
   def leaderboard
-    @leaders = User.leaders.take(@@LEADERBOARD_LIMIT)
+    @standings = params[:standings]
+    if @standings.nil?
+      redirect_to leaderboard_path(:standings => 'all_time')
+      return
+    end
+    @leaders = User.leaders(@standings).take(@@LEADERBOARD_LIMIT)
   end
 end

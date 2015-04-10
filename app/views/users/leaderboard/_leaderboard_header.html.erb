@@ -1,0 +1,16 @@
+<h2>
+	Leaderboard
+</h2>
+<% if standings == 'month' %>
+	<%= link_to 'Month', leaderboard_path(:standings => 'month'), :class => 'btn btn-primary' %>
+	<%= link_to 'Year', leaderboard_path(:standings => 'year'), :class => 'btn btn-success btn-xs' %>
+	<%= link_to 'All Time', leaderboard_path(:standings => 'all_time'), :class => 'btn btn-success btn-xs' %>
+<% elsif standings == 'year' %>
+	<%= link_to 'Month', leaderboard_path(:standings => 'month'), :class => 'btn btn-success btn-xs' %>
+	<%= link_to 'Year', leaderboard_path(:standings => 'year'), :class => 'btn btn-primary' %>
+	<%= link_to 'All Time', leaderboard_path(:standings => 'all_time'), :class => 'btn btn-success btn-xs' %>
+<% else %>
+	<%= link_to 'Month', leaderboard_path(:standings => 'month'), :class => 'btn btn-success btn-xs' %>
+	<%= link_to 'Year', leaderboard_path(:standings => 'year'), :class => 'btn btn-success btn-xs' %>
+	<%= link_to 'All Time', leaderboard_path(:standings => 'all_time'), :class => 'btn btn-primary' %>
+<% end %>

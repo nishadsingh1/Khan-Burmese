@@ -1,3 +1,4 @@
+<%= render 'users/leaderboard/leaderboard_header', :standings => @standings %>
 <% @leaders.each do |leader| %>
-	<%= render 'users/leaderboard/leader_frame', :leader => leader %>
+	<%= render 'users/leaderboard/leader_frame', :leader => leader, :standings => @standings %>
 <% end %>

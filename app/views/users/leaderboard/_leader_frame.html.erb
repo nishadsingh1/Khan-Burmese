@@ -5,7 +5,7 @@
     </a>
   </div>
   <div class="media-body">
-    <p class="media-heading"><%= leader.name.nil? ? leader.email : leader.name %></p>
-    <p class="media-heading">Points: <%= leader.points %></p>
+  	<%= link_to leader.name || leader.email, leader %>
+    <p class="media-heading">Points: <%= leader.points(standings) %></p>
   </div>
 </div>

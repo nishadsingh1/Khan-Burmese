@@ -37,12 +37,13 @@ class User < ActiveRecord::Base
     self.translation_videos.select { |video| video.translated? }
   end
 
+
   def reviewed_videos
     self.get_voted(Translation).map { |translation| translation.video }.uniq
   end
 
-  def points
-    self.translations.reduce(0) { |sum, translation| sum + translation.points }
+  def points(after = Time.now)
+    self.translations.reduce(0) { |sum, translation| sum + translation.points(after) }
   end
 
   def is?(role)
@@ -88,10 +89,20 @@ class User < ActiveRecord::Base
     user
   end
 
-  def self.leaders
+  def self.leaders(since = 'all_time')
+    if since == 'month'
+      after = 1.month.ago
+    elsif since == 'year'
+      after = 1.year.ago
+    elsif since == 'all_time'
+      after = Time.new(0)
+    end
+
+    puts "AFTER " + after.to_s
+
     heap = Containers::MaxHeap.new
     User.all.each do |user|
-      heap.push(user.points, user)
+      heap.push(user.points(after), user)
     end
     leaders = Array.new
     heap.size.times do

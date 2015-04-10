@@ -10,7 +10,7 @@ class Translation < ActiveRecord::Base
     :dropbox_visibility => 'private',
     :path => "#{Rails.env}/srt/:id/translation.srt"
 
-  validates_presence_of :video
+  validates_presence_of :video, :time_updated
   validates_uniqueness_of :user_id, :scope => :video_id
 
   after_create :update_time
@@ -24,8 +24,17 @@ class Translation < ActiveRecord::Base
   # Maps from status symbol to integer representation for database:
   @@STATUS_TO_INT_HASH = @@STATUS_HASH.invert
 
-  def points
-    @@POINTS_HASH[self.status_symbol]
+  def points(since)
+    if since == 'month'
+      after = 1.month.ago
+    elsif since == 'year'
+      after = 1.year.ago
+    else
+      after = Time.new(0)
+    end
+    
+    time_updated = self.time_updated
+    time_updated > after ? @@POINTS_HASH[self.status_symbol] : 0
   end
 
   def reviewers
