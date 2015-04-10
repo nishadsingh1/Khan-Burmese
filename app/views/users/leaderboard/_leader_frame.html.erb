@@ -1,0 +1,11 @@
+<div class="media">
+  <div class="media-left media-middle">
+    <a href="#">
+      <%= image_tag 'avatar.jpg', :class => 'img-circle media-object profile-pic' %>
+    </a>
+  </div>
+  <div class="media-body">
+    <p class="media-heading"><%= leader.name.nil? ? leader.email : leader.name %></p>
+    <p class="media-heading">Points: <%= leader.points %></p>
+  </div>
+</div>

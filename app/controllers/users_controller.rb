@@ -1,4 +1,7 @@
 class UsersController < ApplicationController
+
+  @@LEADERBOARD_LIMIT = 10
+  
   def show
     @user = User.find(params[:id])
     @assigned_videos = @user.untranslated_videos
@@ -22,5 +25,9 @@ class UsersController < ApplicationController
         format.json { render :nothing => true }
       end
     end
+  end
+
+  def leaderboard
+    @leaders = User.leaders.take(@@LEADERBOARD_LIMIT)
   end
 end

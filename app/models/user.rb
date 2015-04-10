@@ -1,3 +1,5 @@
+require 'algorithms'
+
 class User < ActiveRecord::Base
   ROLES = %w[superadmin admin volunteer]
 
@@ -84,6 +86,18 @@ class User < ActiveRecord::Base
       identity.save!
     end
     user
+  end
+
+  def self.leaders
+    heap = Containers::MaxHeap.new
+    User.all.each do |user|
+      heap.push(user.points, user)
+    end
+    leaders = Array.new
+    heap.size.times do
+      leaders.push(heap.pop)
+    end
+    leaders
   end
 
   private

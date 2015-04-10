@@ -10,6 +10,9 @@ KhanBurmese::Application.routes.draw do
   # For page prototypes:
   get 'preview' => 'preview#show', :as => :prototype
 
+  # Viewing leaderboard:
+  get 'leaderboard' => 'users#leaderboard', :as => :leaderboard
+
   # Download files:
   get 'download' => 'files#download'
 
