@@ -70,7 +70,7 @@ gem 'jquery-rails'
 
 gem 'algorithms'
 
-gem "activesupport", :require => "active_support"
+
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

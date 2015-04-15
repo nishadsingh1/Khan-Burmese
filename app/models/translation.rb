@@ -24,17 +24,8 @@ class Translation < ActiveRecord::Base
   # Maps from status symbol to integer representation for database:
   @@STATUS_TO_INT_HASH = @@STATUS_HASH.invert
 
-  def points(since)
-    if since == 'month'
-      after = 1.month.ago
-    elsif since == 'year'
-      after = 1.year.ago
-    else
-      after = Time.new(0)
-    end
-    
-    time_updated = self.time_updated
-    time_updated > after ? @@POINTS_HASH[self.status_symbol] : 0
+  def points
+    @@POINTS_HASH[self.status_symbol]
   end
 
   def reviewers

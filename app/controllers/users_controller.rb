@@ -28,11 +28,13 @@ class UsersController < ApplicationController
   end
 
   def leaderboard
-    @standings = params[:standings]
-    if @standings.nil?
-      redirect_to leaderboard_path(:standings => 'all_time')
-      return
+    if params[:standings] == 'year'
+      @after = 1.year.ago
+    elsif params[:standings] == 'month'
+      @after = 1.month.ago
+    else
+      @after = Time.new(0)
     end
-    @leaders = User.leaders(@standings).take(@@LEADERBOARD_LIMIT)
+    @leaders = User.leaders(@after).take(@@LEADERBOARD_LIMIT)
   end
 end
