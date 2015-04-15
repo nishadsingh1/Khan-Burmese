@@ -10,7 +10,7 @@ class Translation < ActiveRecord::Base
     :dropbox_visibility => 'private',
     :path => "#{Rails.env}/srt/:id/translation.srt"
 
-  validates_presence_of :video, :time_updated
+  validates_presence_of :video
   validates_uniqueness_of :user_id, :scope => :video_id
 
   after_create :update_time
