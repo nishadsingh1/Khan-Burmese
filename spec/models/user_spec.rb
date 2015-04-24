@@ -86,4 +86,26 @@ describe User, :type => :model do
       expect(@user.translated_videos).not_to include @video
     end
   end
+
+  describe "leaderboard and points tests" do
+    before(:each) do
+      @user = FactoryGirl.create(:user)
+      @year_t, @month_t, @old_t = Translation.new, Translation.new, Translation.new
+      @year_t.status, @month_t.status, @old_t.status = 2, 1, 1
+      @year_t.stub(:time_updated).and_return(40.days.ago)
+      @month_t.stub(:time_updated).and_return(20.days.ago)
+      @old_t.stub(:time_updated).and_return(2.years.ago)
+      @user.stub(:translations).and_return([@year_t, @month_t, @old_t])   
+    end
+    it "should calculate all_time points correctly" do
+      expect(@user.points).to be == (@year_t.points + @month_t.points + @old_t.points)
+    end
+    it "should calculate year points correctly" do
+      expect(@user.points(1.year.ago)).to be == (@year_t.points + @month_t.points)
+    end
+    it "should calculate month points correctly" do
+      expect(@user.points(1.month.ago)).to be == (@month_t.points)
+    end
+    
+  end
 end

@@ -29,4 +29,23 @@ describe Translation, :type => :model do
       expect {translation2.save!}.to raise_error
     end
   end
+
+  describe "translation points should be calculated correctly" do
+    before(:each) do
+      @translation = Translation.new
+    end
+    it "should return 2 points for a priority status video" do
+      @translation.stub(:status_symbol).and_return(:complete_with_priority)
+      expect(@translation.points).to be == 2
+    end
+    it "should return 1 point for a normal status video" do
+      @translation.stub(:status_symbol).and_return(:complete)
+      expect(@translation.points).to be == 1
+    end
+    it "should return 0 points for an incomplete status video" do
+      @translation.stub(:status_symbol).and_return(:incomplete)
+      expect(@translation.points).to be == 0
+    end
+  end
+
 end

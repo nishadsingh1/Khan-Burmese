@@ -39,4 +39,12 @@ describe UsersController do
       expect(@user.reload.name).to eq 'Casey Novak'
     end
   end
+
+  describe "leaderboard tests" do
+    it "should correctly implement leaderboard limit" do
+      controller.stub(:current_user).and_return(FactoryGirl.create(:user))
+      controller.leaderboard
+      expect(assigns(:leaders).size).to be <= 10
+    end
+  end
 end
