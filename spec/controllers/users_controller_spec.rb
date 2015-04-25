@@ -61,5 +61,7 @@ describe UsersController do
       expect(assigns(:reviewed_videos)).to include @video
     end
 
+    
+
   end
 end
