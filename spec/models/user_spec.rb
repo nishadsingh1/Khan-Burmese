@@ -116,10 +116,9 @@ describe User, :type => :model do
       @user = FactoryGirl.create(:user)
       @video = FactoryGirl.create(:video)
       @translation = Translation.create(:user => @user, :video => @video)
-      
     end
     it "should return the correct assigned videos" do
-    @translation.stub(:complete?).and_return(false)
+      @translation.stub(:complete?).and_return(false)
       expect(@user.assigned_videos).to include @video
     end
   end
@@ -143,11 +142,11 @@ describe User, :type => :model do
       @user.email = nil
       expect(@user.email_verified?).not_to eq true
     end
-    it "should capitalize fields correclty" do
+    it "should capitalize fields correctly in after_safe" do
       @user.country = "united states"
+      expect(@user.country).to eq "united states"
       @user.save
       expect(@user.country).to eq "United States"
-      @user.destroy
     end
   end
 

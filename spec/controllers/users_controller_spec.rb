@@ -41,27 +41,16 @@ describe UsersController do
   end
 
   describe "leaderboard tests" do
+    login_user
+
     before(:each) do
-      @user, @video = FactoryGirl.create(:user), FactoryGirl.create(:video)
+      @user, @video = User.find_by_email('normal@user.com'), FactoryGirl.create(:video), 
       @translation = Translation.create(:user => @user, :video => @video)
-      @translation.stub(:complete?).and_return(true)
-      controller.stub(:current_user).and_return(@user)
     end
 
-    it "should correctly assign untranslated videos" do
-      @video.stub(:translated?).and_return(false)
-      controller.leaderboard
-      expect(assigns(:assigned_videos)).to include @video
+    it "should not count untranslated videos as translated" do
+      get 'leaderboard'
       expect(assigns(:translated_videos)).not_to include @video
     end
-
-    it "should correctly assign reviewed videos" do
-      @user.stub(:reviewed_videos).and_return([@video])
-      controller.leaderboard
-      expect(assigns(:reviewed_videos)).to include @video
-    end
-
-    
-
   end
 end
