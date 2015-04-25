@@ -111,4 +111,44 @@ describe User, :type => :model do
     
   end
 
+  describe "video methods" do
+    before(:each) do
+      @user = FactoryGirl.create(:user)
+      @video = FactoryGirl.create(:video)
+      @translation = Translation.create(:user => @user, :video => @video)
+      
+    end
+    it "should return the correct assigned videos" do
+    @translation.stub(:complete?).and_return(false)
+      expect(@user.assigned_videos).to include @video
+    end
+  end
+
+  describe "basic methods" do
+    before(:each) do
+      @user = FactoryGirl.create(:user)
+    end
+    it "should return the correct first name" do
+      expect(@user.first_name).to eq "Olivia"
+    end
+    it "should return the correct last name" do
+      expect(@user.last_name).to eq "Benson"
+    end
+    it "should identify a defalut user's role correclty" do
+      @user.assign_default_role
+      expect(@user.is?('volunteer')).to eq true
+    end
+    it "should check for email verficiation correctly" do
+      expect(@user.email_verified?).to eq true
+      @user.email = nil
+      expect(@user.email_verified?).not_to eq true
+    end
+    it "should capitalize fields correclty" do
+      @user.country = "united states"
+      @user.save
+      expect(@user.country).to eq "United States"
+      @user.destroy
+    end
+  end
+
 end
