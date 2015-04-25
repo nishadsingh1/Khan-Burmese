@@ -48,4 +48,15 @@ describe Translation, :type => :model do
     end
   end
 
+  describe "testing upload_amara" do
+    it "uploading an amara link should complete a translation" do
+      translation = Translation.new(:video => FactoryGirl.create(:video))
+      Translation.stub(:verify_link)
+      Video.stub(:get_srt_link_from_amara).and_return("http://test_link.com")
+      URI.stub(:parse)
+      translation.upload_amara("http://test_link")
+      expect(translation.complete?).to be true
+    end
+  end
+
 end
