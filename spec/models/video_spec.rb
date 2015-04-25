@@ -25,6 +25,8 @@ describe Video, :type => :model do
       @video = FactoryGirl.create(:video)
       @user = FactoryGirl.create(:user)
       @translation = Translation.create(:user => @user, :video => @video)
+      @translation.vote_by :voter => @user, :vote => true
+      @translation.complete
     end
 
     it "should claim it is unassigned if there is no user/video associated with it" do
@@ -32,6 +34,29 @@ describe Video, :type => :model do
     end
     it "should claim it is assigned if there is a user/video associated with it" do
       expect(@video.assigned?).to eq true
+    end
+    it "should include translations that are associated with it in reviewed_translations" do
+      expect(@video.reviewed_translations).to include @translation
+    end
+    it "should reflect that it has been translated if one of its translations is complete" do
+      expect(@video.translated?).to eq true
+    end
+    it "should reflect that it has been reviewed if one of its translations has been" do 
+      expect(@video.reviewed?).to eq true
+    end
+    it "should correclty identify its reviewers" do
+      expect(@video.reviewers).to include @user
+    end
+    it "an untranslated, unassigned video should declare that it is unassigned" do
+      expect(Video.new.status).to eq :unassigned
+    end
+    it "an untranslated, assigned video should declare that it is assigned" do
+      video = Video.create
+      video.stub(:translations).and_return([Translation.new])
+      expect(video.status).to eq :assigned
+    end
+    it "should not have any recently translated videos given restrictive paramters" do
+      expect(Video.recently_translated_videos(Time.now)).to be_empty
     end
   end
   describe "link tests" do
