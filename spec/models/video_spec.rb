@@ -34,6 +34,32 @@ describe Video, :type => :model do
       expect(@video.assigned?).to eq true
     end
   end
+  describe "link tests" do
+    before(:each) do
+      @video = FactoryGirl.create(:video)
+      @video.amara_id = "invalidAmaraId"
+    end
+    it "should handle youtube requests appropriately" do
+      expect(@video.youtube_link).to include @video.youtube_id
+    end
+    it "should handle amara requests appropriately" do
+      expect(@video.amara_link).to include @video.amara_id
+    end
+    it "should not return an srt link if the amara id is invalid" do
+      result = mock('result')
+      allow(result).to receive(:code) {'403'}
+      Net::HTTP.stub(:get_response).and_return(result)
+      expect(@video.amara_en_srt).to eq nil
+    end
+    it "should not return an srt link if the amara id is invalid" do
+      result = mock('result')
+      allow(result).to receive(:code) {'302'}
+      allow(result).to receive(:header) {{'location' => 'testlocation'}}
+      allow(result).to receive(:body) {'<a href="body">SRT</a>'}
+      Net::HTTP.stub(:get_response).and_return(result)
+      expect(@video.amara_en_srt).to include 'body'
+    end
+  end
   describe "uploading CRTs" do
     it "should reject a missing file" do
       expect {Video.import(nil)}.to raise_error
