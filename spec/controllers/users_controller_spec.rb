@@ -41,10 +41,25 @@ describe UsersController do
   end
 
   describe "leaderboard tests" do
-    it "should correctly implement leaderboard limit" do
-      controller.stub(:current_user).and_return(FactoryGirl.create(:user))
-      controller.leaderboard
-      expect(assigns(:leaders).size).to be <= 10
+    before(:each) do
+      @user, @video = FactoryGirl.create(:user), FactoryGirl.create(:video)
+      @translation = Translation.create(:user => @user, :video => @video)
+      @translation.stub(:complete?).and_return(true)
+      controller.stub(:current_user).and_return(@user)
     end
+
+    it "should correctly assign untranslated videos" do
+      @video.stub(:translated?).and_return(false)
+      controller.leaderboard
+      expect(assigns(:assigned_videos)).to include @video
+      expect(assigns(:translated_videos)).not_to include @video
+    end
+
+    it "should correctly assign reviewed videos" do
+      @user.stub(:reviewed_videos).and_return([@video])
+      controller.leaderboard
+      expect(assigns(:reviewed_videos)).to include @video
+    end
+
   end
 end

@@ -36,15 +36,15 @@ describe Translation, :type => :model do
     end
     it "should return 2 points for a priority status video" do
       @translation.stub(:status_symbol).and_return(:complete_with_priority)
-      expect(@translation.points).to be == 2
+      expect(@translation.points).to eq 2
     end
     it "should return 1 point for a normal status video" do
       @translation.stub(:status_symbol).and_return(:complete)
-      expect(@translation.points).to be == 1
+      expect(@translation.points).to eq 1
     end
     it "should return 0 points for an incomplete status video" do
       @translation.stub(:status_symbol).and_return(:incomplete)
-      expect(@translation.points).to be == 0
+      expect(@translation.points).to eq 0
     end
   end
 
